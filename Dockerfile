@@ -45,7 +45,7 @@ ENV JDK_PACKAGE jdk-8u25-linux-x64.tar.gz
 ADD dl /tmp
 # Java
 RUN tar -zxf /tmp/$JDK_PACKAGE -C /usr/local && \
-    ln -s /usr/local/$JDK_VERSION /usr/local/java
+    ln -s /usr/local/$JDK_VERSION /usr/local/java && \
     rm -rf /tmp/$JDK_PACKAGE
 
 # Install android sdk
