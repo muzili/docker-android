@@ -90,17 +90,12 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 ENV PATH $PATH:$ANT_HOME/bin
 
 # Running many at the same time was causing problems. So, running one-by-one:
-RUN echo y | android update sdk --no-https --all --no-ui --force --filter android-18 && \
+RUN echo y | android update sdk --no-https --all --no-ui --force --filter android-17 && \
     echo y | android update sdk --no-https --all --no-ui --force --filter android-19 && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter android-20 && \
     echo y | android update sdk --no-https --all --no-ui --force --filter android-21 && \
     echo y | android update sdk --no-https --all --no-ui --force --filter tools && \
     echo y | android update sdk --no-https --all --no-ui --force --filter platform-tools && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-18.1.1 && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-19.0.0 && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-19.1.0 && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-20.0.0 && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-21.0.2 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-21.1.1 && \
     echo y | android update sdk --no-https --all --no-ui --force --filter extra-android-m2repository && \
     echo y | android update sdk --no-https --all --no-ui --force --filter extra-android-support && \
     echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-admob_ads_sdk && \
@@ -113,9 +108,9 @@ RUN echo y | android update sdk --no-https --all --no-ui --force --filter androi
     echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_billing && \
     echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_licensing && \
     echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-webdriver && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-12 && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-18 && \
-    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-19
+    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-21 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-19 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-17
 
 # Clean up
 RUN apt-get clean
