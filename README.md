@@ -10,20 +10,20 @@ It also updates the SDK to android 19(4.4.x)/17(4.2.2)/21(5.0) with platform too
 
 #### Install
 
-You can either pull from `muzili/docker-android`:
+You can either pull from `muzili/android`:
 
 ```
-docker pull muzili/docker-android
+docker pull muzili/android
 ```
 
 ```
-alias android-build='docker run -i --privileged -v /dev/bus/usb:/dev/bus/usb -v $(pwd):/app -w /app -u $UID:$GID muzili/docker-android'
+alias android-build='docker run -i --privileged -v /dev/bus/usb:/dev/bus/usb -v $(pwd):/app -w /app -u $UID:$GID muzili/android'
 ```
 
 or add it to your Dockerfile:
 
 ```
-FROM muzili/docker-android
+FROM muzili/android
 ```
 
 got to the working directory
