@@ -1,4 +1,4 @@
-# Start with ubuntu precise (LTS).
+# Start with ubuntu 14.04.1 (LTS).
 FROM ubuntu:14.04.1
 
 MAINTAINER Joshua Lee <muzili@gmail.com>
@@ -38,14 +38,14 @@ RUN curl -b gpw_e24=http%3A%2F%2Fwww.oracle.com -b oraclelicense=accept-secureba
 ENV ANDROID_SDK_VERSION r23.0.2
 #ENV ANDROID_SDK_VERSION all-in-one
 #http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz
-RUN curl http://dl.google.com/android/android-sdk_$ANDROID_SDK_VERSION-linux.tgz | \
+RUN curl -L http://dl.google.com/android/android-sdk_$ANDROID_SDK_VERSION-linux.tgz | \
     tar -xz -C /usr/local && \
     ln -sf /usr/local/android-sdk-linux /usr/local/android-sdk
 
 # Install android ndk
 ENV ANDROID_NDK_VERSION r10c
 #http://dl.google.com/android/ndk/android-ndk-r10c-linux-x86_64.bin
-RUN curl http://dl.google.com/android/ndk/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin \
+RUN curl -L http://dl.google.com/android/ndk/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin \
     -o /tmp/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin && \
     7z x /tmp/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin -o/usr/local && \
     ln -sf /usr/local/android-ndk-$ANDROID_NDK_VERSION /usr/local/android-ndk && \
@@ -55,14 +55,14 @@ RUN curl http://dl.google.com/android/ndk/android-ndk-$ANDROID_NDK_VERSION-linux
 ENV ANT_VERSION 1.9.4
 #http://mirrors.aliyun.com/apache/ant/binaries/apache-ant-1.9.4-bin.tar.gz
 #https://www.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz
-RUN curl http://www.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz | \
+RUN curl -L http://www.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz | \
     tar -xz -C /usr/local && \
     ln -sf /usr/local/apache-ant-$ANT_VERSION /usr/local/apache-ant
 
 # Install Gradle
 ENV GRADLE_VERSION 2.1
 #http://services.gradle.org/distributions/gradle-2.1-bin.zip
-RUN curl http://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip \
+RUN curl -L http://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip \
     -o /tmp/gradle-$GRADLE_VERSION-bin.zip  && \
     unzip -qq /tmp/gradle-$GRADLE_VERSION-bin.zip -d /usr/local/ && \
     ln -sf /usr/local/gradle-$GRADLE_VERSION /usr/local/gradle && \
