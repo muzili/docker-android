@@ -16,12 +16,9 @@ RUN dpkg --add-architecture i386 && \
 
 
 # Install Development packages
-RUN apt-get install -y --no-install-recommends apt-transport-https ca-certificates && \
-    software-properties-common wget git curl unzip zip bzip2 p7zip-full less nano vim && \
+RUN apt-get install -y --no-install-recommends apt-transport-https ca-certificates \
+    software-properties-common wget git curl unzip zip bzip2 p7zip-full less nano vim \
     build-essential make expect libssl-dev man libstdc++6:i386 lib32z1 lib32bz2-1.0 lib32ncurses5 
-
-#Add the predownloaded packages
-ADD dl /tmp
 
 # Java
 # Information Of Package
@@ -31,33 +28,43 @@ ENV JDK_PACKAGE jdk-8u25-linux-x64.tar.gz
 #http://download.oracle.com/otn-pub/java/jdk/8u25-b17/jdk-8u25-linux-x64.tar.gz
 #http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.tar.gz
 #http://download.oracle.com/otn-pub/java/jdk/7u72-b14/jdk-7u72-linux-x64.tar.gz
-
-RUN tar -zxf /tmp/$JDK_PACKAGE -C /usr/local && \
+RUN curl -b gpw_e24=http%3A%2F%2Fwww.oracle.com -b oraclelicense=accept-securebackup-cookie \
+    -L http://download.oracle.com/otn-pub/java/jdk/8u25-b17/jdk-8u25-linux-x64.tar.gz | \
+    tar -zx -C /usr/local && \
     ln -s /usr/local/$JDK_VERSION /usr/local/java && \
     rm -rf /tmp/$JDK_PACKAGE
 
 # Install android sdk
-#ENV ANDROID_SDK_VERSION r23.0.2
-ENV ANDROID_SDK_VERSION all-in-one
-RUN tar -xzf /tmp/android-sdk_$ANDROID_SDK_VERSION-linux.tgz -C /usr/local && \
-    ln -sf /usr/local/android-sdk-linux /usr/local/android-sdk && \
-    rm -rf /tmp/android-sdk_$ANDROID_SDK_VERSION-linux.tgz
+ENV ANDROID_SDK_VERSION r23.0.2
+#ENV ANDROID_SDK_VERSION all-in-one
+#http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz
+RUN curl http://dl.google.com/android/android-sdk_$ANDROID_SDK_VERSION-linux.tgz | \
+    tar -xz -C /usr/local && \
+    ln -sf /usr/local/android-sdk-linux /usr/local/android-sdk
 
 # Install android ndk
 ENV ANDROID_NDK_VERSION r10c
-RUN 7z x /tmp/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin -o/usr/local && \
+#http://dl.google.com/android/ndk/android-ndk-r10c-linux-x86_64.bin
+RUN curl http://dl.google.com/android/ndk/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin \
+    -o /tmp/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin && \
+    7z x /tmp/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin -o/usr/local && \
     ln -sf /usr/local/android-ndk-$ANDROID_NDK_VERSION /usr/local/android-ndk && \
     rm -rf /tmp/android-ndk-$ANDROID_NDK_VERSION-linux-x86_64.bin
 
 # Install apache ant
 ENV ANT_VERSION 1.9.4
-RUN tar -xzf /tmp/apache-ant-$ANT_VERSION-bin.tar.gz -C /usr/local && \
-    ln -sf /usr/local/apache-ant-$ANT_VERSION /usr/local/apache-ant && \
-    rm /tmp/apache-ant-$ANT_VERSION-bin.tar.gz
+#http://mirrors.aliyun.com/apache/ant/binaries/apache-ant-1.9.4-bin.tar.gz
+#https://www.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz
+RUN curl http://www.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz | \
+    tar -xz -C /usr/local && \
+    ln -sf /usr/local/apache-ant-$ANT_VERSION /usr/local/apache-ant
 
 # Install Gradle
 ENV GRADLE_VERSION 2.1
-RUN unzip -qq /tmp/gradle-$GRADLE_VERSION-bin.zip -d /usr/local/ && \
+#http://services.gradle.org/distributions/gradle-2.1-bin.zip
+RUN curl http://services.gradle.org/distributions/$GRADLE_VERSION-bin.zip \
+    -o /tmp/gradle-$GRADLE_VERSION-bin.zip  && \
+    unzip -qq /tmp/gradle-$GRADLE_VERSION-bin.zip -d /usr/local/ && \
     ln -sf /usr/local/gradle-$GRADLE_VERSION /usr/local/gradle && \
     rm /tmp/gradle-$GRADLE_VERSION-bin.zip
 
@@ -77,27 +84,26 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 ENV PATH $PATH:$ANT_HOME/bin
 
 # Running many at the same time was causing problems. So, running one-by-one:
-#RUN echo y | android update sdk --no-https --all --no-ui --force --filter android-17 && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter android-19 && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter android-21 && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter tools && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter platform-tools && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-21.1.1 && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-android-m2repository && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-android-support && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-admob_ads_sdk && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-analytics_sdk_v2 && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-gcm && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-google_play_services && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-google_play_services_froyo && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-m2repository && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_apk_expansion && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_billing && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_licensing && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-webdriver && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-21 && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-19 && \
-#    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-17
+RUN echo y | android update sdk --no-https --all --no-ui --force --filter android-17 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter android-19 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter android-21 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter tools && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter platform-tools && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter build-tools-21.1.1 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-android-m2repository && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-android-support && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-admob_ads_sdk && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-analytics_sdk_v2 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-gcm && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-google_play_services && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-m2repository && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_apk_expansion && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_billing && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-play_licensing && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter extra-google-webdriver && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-21 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-19 && \
+    echo y | android update sdk --no-https --all --no-ui --force --filter addon-google_apis-google-17
 #
 # Clean up
 RUN apt-get clean
