@@ -62,7 +62,7 @@ RUN curl http://www.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar
 # Install Gradle
 ENV GRADLE_VERSION 2.1
 #http://services.gradle.org/distributions/gradle-2.1-bin.zip
-RUN curl http://services.gradle.org/distributions/$GRADLE_VERSION-bin.zip \
+RUN curl http://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip \
     -o /tmp/gradle-$GRADLE_VERSION-bin.zip  && \
     unzip -qq /tmp/gradle-$GRADLE_VERSION-bin.zip -d /usr/local/ && \
     ln -sf /usr/local/gradle-$GRADLE_VERSION /usr/local/gradle && \
