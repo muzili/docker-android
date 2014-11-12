@@ -5,9 +5,9 @@ MAINTAINER Joshua Lee <muzili@gmail.com>
 
 # Never ask for confirmations
 ENV DEBIAN_FRONTEND noninteractive
-RUN echo "deb http://mirrors.aliyun.com/ubuntu trusty main universe restricted" > /etc/apt/sources.list && \
- echo "deb http://mirrors.aliyun.com/ubuntu trusty-updates main universe restricted" >> /etc/apt/sources.list && \
- echo "deb http://mirrors.aliyun.com/ubuntu trusty-security main universe restricted" >> /etc/apt/sources.list
+RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe restricted" > /etc/apt/sources.list && \
+ echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main universe restricted" >> /etc/apt/sources.list && \
+ echo "deb http://archive.ubuntu.com/ubuntu trusty-security main universe restricted" >> /etc/apt/sources.list
 
 # Add i386 arch packages and update
 RUN dpkg --add-architecture i386 && \
